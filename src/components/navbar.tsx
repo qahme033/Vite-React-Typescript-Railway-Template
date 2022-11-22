@@ -34,10 +34,8 @@ interface MenuItem {
   has_icon: boolean;
 }
 
-const showDropdown = (show:boolean, setShow: React.Dispatch<React.SetStateAction<boolean>>) => setShow(!show)
-const hideDropdown = (setShow: React.Dispatch<React.SetStateAction<boolean>>) => {setShow(false)}
-const gen_custom_dropdown = (item: MenuItem, show: boolean, setShow: React.Dispatch<React.SetStateAction<boolean>>) => 
-  <NavDropdown    show={show} onMouseEnter={showDropdown} onMouseLeave={hideDropdown} title={gen_custom_div(item.name, item.icon_name)} > 
+const gen_custom_dropdown = (item: MenuItem, shown_name: string, setShow: React.Dispatch<React.SetStateAction<string>>) => 
+  <NavDropdown    show={shown_name == item.name} onMouseEnter={() => setShow(item.name)} onMouseLeave={() => setShow('')} title={gen_custom_div(item.name, item.icon_name)} > 
     {item.drop_down_menu_list.map(item =>  <NavDropdown.Item eventKey="4.1">{gen_custom_div(item.name, item.icon_name)}</NavDropdown.Item>)}
   </NavDropdown>
 
@@ -45,7 +43,7 @@ const gen_custom_button = (item: MenuItem) => <Button variant="light">{gen_custo
 
 function NavBar() {
   const [data, dispatchData] = useState([] as any[]);
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState('');
 
   const getData = async () => {
     const { data } = await axios.get('https://bff-production.up.railway.app/get_navbar_menu_items');
@@ -66,7 +64,7 @@ function NavBar() {
               <NavbarBrand/>
             </Navbar.Brand>
             <Nav className="me-auto justify-content-end flex-grow-1 pe-3">
-              {data.map((item: MenuItem) => (item.drop_down_menu_list.length > 0 ? gen_custom_dropdown(item): gen_custom_button(item)))} 
+              {data.map((item: MenuItem) => (item.drop_down_menu_list.length > 0 ? gen_custom_dropdown(item, show, setShow): gen_custom_button(item)))} 
             </Nav>
         </Container>
       </Navbar>
