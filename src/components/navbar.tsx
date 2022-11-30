@@ -34,12 +34,12 @@ interface MenuItem {
   has_icon: boolean;
 }
 
-const gen_custom_dropdown = (item: MenuItem, shown_name: string, setShow: React.Dispatch<React.SetStateAction<string>>) => 
-  <NavDropdown    show={shown_name == item.name} onMouseEnter={() => setShow(item.name)} onMouseLeave={() => setShow('')} title={gen_custom_div(item.name, item.icon_name)} > 
-    {item.drop_down_menu_list.map(item =>  <NavDropdown.Item eventKey="4.1">{gen_custom_div(item.name, item.icon_name)}</NavDropdown.Item>)}
+const gen_custom_dropdown = (item: MenuItem, index: Number, shown_name: string, setShow: React.Dispatch<React.SetStateAction<string>>) => 
+  <NavDropdown key={index.toString()}   show={shown_name == item.name} onMouseEnter={() => setShow(item.name)} onMouseLeave={() => setShow('')} title={gen_custom_div(item.name, item.icon_name)} > 
+    {item.drop_down_menu_list.map((item: MenuItem, index: Number) =>  <NavDropdown.Item key={index.toString()} eventKey="4.1">{gen_custom_div(item.name, item.icon_name)}</NavDropdown.Item>)}
   </NavDropdown>
 
-const gen_custom_button = (item: MenuItem) => <Button variant="light">{gen_custom_div(item.name, item.icon_name)}</Button>
+const gen_custom_button = (item: MenuItem, index: Number) => <Button key={index.toString()} variant="light">{gen_custom_div(item.name, item.icon_name)}</Button>
 
 function NavBar() {
   const [data, dispatchData] = useState([] as any[]);
@@ -64,7 +64,7 @@ function NavBar() {
               <NavbarBrand/>
             </Navbar.Brand>
             <Nav className="me-auto justify-content-end flex-grow-1 pe-3">
-              {data.map((item: MenuItem) => (item.drop_down_menu_list.length > 0 ? gen_custom_dropdown(item, show, setShow): gen_custom_button(item)))} 
+              {data.map((item: MenuItem, index: Number) => (item.drop_down_menu_list.length > 0 ? gen_custom_dropdown(item, index, show, setShow): gen_custom_button(item, index)))} 
             </Nav>
         </Container>
       </Navbar>
